@@ -6,6 +6,12 @@
  */
 package leetcode
 
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
 // divide and conquer's template
 // 递归返回条件
 // 分段处理
