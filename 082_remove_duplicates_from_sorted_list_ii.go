@@ -8,47 +8,85 @@ package leetcode
 
 func deleteDuplicates(head *ListNode) *ListNode {
 	// deleteWithoutNewList(head)
-	return deleteWithNewList(head)
+	// deleteWithNewList(head)
+	return deleteWithDummy(head)
 }
 
-func deleteWithNewList(head *ListNode) *ListNode {
-	if head == nil || head.Next == nil{
+/** dummy节点可以用来处理边界条件 **/
+func deleteWithDummy(head *ListNode) *ListNode {
+	if head == nil {
 		return head
 	}
-	newList := new(ListNode)
-	newPtr := newList
-	slow, fast := head, head.Next
+	dummy := &ListNode{0, nil}
+	dummy.Next = head
+	head = dummy
+	pre, mid, post := head, head.Next, head.Next.Next
+	var lastRm int
 
-	if fast.Next == nil {
-		if slow.Val == fast.Val {
-			return nil
-		} else {
-			return &ListNode{slow.Val, &ListNode{fast.Val, nil}}
-		}
-	}
-
-	pre, slow ,fast := head, head.Next, head.Next.Next
-	if pre.Val != slow.Val {
-		newPtr.Next = &ListNode{pre.Val, nil}
-		newPtr = newPtr.Next
-	}
 	for {
-		if fast == nil {
-			if slow.Val != pre.Val {
-				newPtr.Next = &ListNode{slow.Val, nil}
+		if post == nil {
+			// deal with last node: mid
+			if mid.Val == lastRm {
+				pre.Next = nil
 			}
 			break
 		}
-		if slow.Val != pre.Val && slow.Val != fast.Val {
-			newPtr.Next = &ListNode{slow.Val, nil}
-			newPtr = newPtr.Next
+		if mid.Val == post.Val {
+			lastRm = mid.Val
+			for lastRm == mid.Val && post != nil {
+				mid = post
+				post = post.Next
+			}
+			pre.Next = mid
+		} else {
+			pre = mid
+			mid = post
+			post = post.Next
 		}
-		pre = slow
-		slow = fast
-		fast = fast.Next
 	}
-	return newList.Next
+
+	return dummy.Next
+
 }
+
+// func deleteWithNewList(head *ListNode) *ListNode {
+// 	if head == nil || head.Next == nil{
+// 		return head
+// 	}
+// 	newList := new(ListNode)
+// 	newPtr := newList
+// 	slow, fast := head, head.Next
+//
+// 	if fast.Next == nil {
+// 		if slow.Val == fast.Val {
+// 			return nil
+// 		} else {
+// 			return &ListNode{slow.Val, &ListNode{fast.Val, nil}}
+// 		}
+// 	}
+//
+// 	pre, slow ,fast := head, head.Next, head.Next.Next
+// 	if pre.Val != slow.Val {
+// 		newPtr.Next = &ListNode{pre.Val, nil}
+// 		newPtr = newPtr.Next
+// 	}
+// 	for {
+// 		if fast == nil {
+// 			if slow.Val != pre.Val {
+// 				newPtr.Next = &ListNode{slow.Val, nil}
+// 			}
+// 			break
+// 		}
+// 		if slow.Val != pre.Val && slow.Val != fast.Val {
+// 			newPtr.Next = &ListNode{slow.Val, nil}
+// 			newPtr = newPtr.Next
+// 		}
+// 		pre = slow
+// 		slow = fast
+// 		fast = fast.Next
+// 	}
+// 	return newList.Next
+// }
 
 // func deleteWithoutNewList(head *ListNode) *ListNode {
 // 	for head == nil {

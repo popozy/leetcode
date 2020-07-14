@@ -5,38 +5,52 @@
  */
 package leetcode
 
-type ListNode struct {
-	Val int
-	Next *ListNode
-}
 func reverseList(head *ListNode) *ListNode {
-	if head == nil {
-		return nil
-	} else if head.Next == nil {
+	if head == nil || head.Next == nil{
 		return head
 	}
-	rList := &ListNode{head.Val, nil}
-	swapNode := head.Next
-	head = head.Next
-
-	return genRListByRecursion(rList, head, swapNode)
+	res, newHead := reverseRecursive(head.Next)
+	res.Next = head
+	head.Next = nil
+	return newHead
 }
 
-// 对于递归，确认以下几个要素
-// 递归函数参数，一般是 1. 需要判定何时结束递归的flag 2. 其他需要在过程中变化使用的变量
-// 递归函数处理好递归前的初始操作
-// 递归函数本身，分两大分支： 1. 跳出递归 返回结果 2. 递归没结束时的基本操作 继续传参调用递归
-func genRListByRecursion(rList *ListNode, head *ListNode, swapNode *ListNode) *ListNode {
+// return param1: 1st node
+// return param2: last node---new head
+func reverseRecursive(head *ListNode) (*ListNode, *ListNode) {
 	if head.Next == nil {
-		// deal return
-		head.Next = rList
-		rList = head
-		return rList
-	} else {
-		head = head.Next
-		swapNode.Next = rList
-		rList = swapNode
-		swapNode = head
-		return genRListByRecursion(rList, head, swapNode)
+		return head, head
 	}
+
+	res, newHead := reverseRecursive(head.Next)
+	res.Next = head
+	return head, newHead
 }
+
+// // 单向链表可以在指针头增加dummy节点，翻转链表时要先把dummy的next置空，防止后面cut的时候找不到尾巴
+// func reverseList(head *ListNode) *ListNode {
+// 	if head == nil {
+// 		return head
+// 	}
+// 	dummy := &ListNode{0, head}
+// 	pre, op, post := dummy, head, head.Next
+//
+// 	// pre.Next = nil
+// 	for post != nil {
+// 		op.Next = pre
+// 		pre = op
+// 		op = post
+// 		post = post.Next
+// 	}
+// 	// deal last node
+// 	op.Next = pre
+//
+// 	// cut dummy node
+// 	ptr := op
+// 	for ptr.Next.Next != nil {
+// 		ptr = ptr.Next
+// 	}
+// 	ptr.Next = nil
+//
+// 	return op
+// }
