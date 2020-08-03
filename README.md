@@ -78,3 +78,30 @@ leetcode practice
 > + 调度场算法+逆波兰表达式入栈出站可以解决大多数的复杂操作符（分优先级）+算子的计算，但是要注意先后顺序
 > + 简化算法暴力对中序进行计算能够降低调度场算法和逆波兰进出站计算的代码复杂性，这个取舍要看题目的操作符分级的复杂程度
 
+# 字符串操作
+
+### Tips：
+
++ 翻转字符串中点为i < len(s)/2
++ 判断字符串中字符是否落在某个区间[charA, charZ]，可先split，再字符串做比（不是char类型比较）
+
+### 字符串操作
+``` golang
+func Join(a []string, sep string) string
+
+// Split slices s into all substrings separated by sep and returns a slice of
+// the substrings between those separators.
+//
+// If s does not contain sep and sep is not empty, Split returns a
+// slice of length 1 whose only element is s.
+//
+// If sep is empty, Split splits after each UTF-8 sequence. If both s
+// and sep are empty, Split returns an empty slice.
+//
+// It is equivalent to SplitN with a count of -1.
+func Split(s, sep string) []string { return genSplit(s, sep, 0, -1) }
+
+// Generic split: splits after each instance of sep,
+// including sepSave bytes of sep in the subarrays.
+func genSplit(s, sep string, sepSave, n int) []string
+```
